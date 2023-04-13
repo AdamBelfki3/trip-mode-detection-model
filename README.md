@@ -48,3 +48,53 @@ The distribution of the labels in the dataset looks as follows:
 The experimental setup we implemented focused on splitting our generated dataset to a train (80%) and test (20%) data splits and subsequently train different classification models and compare the accuracy and score results. We decided to experiment with the **K-Nearest Neighbors** and **Random Forest Classifiers**, with hyperparameter tuning for chosen parameters using KFold cross validation. In the KNN model we work on finding the optimal number of neighbors to be considered in the model, while for Random Forest we wanted to optimize both the tree depth and number of trees generated.
 
 Our next step is to implement a Neural Network to train our data on. The structure of the network will have one hidden layer of 100 neurons with a ReLU activation function and a log softmax applied on the output layer.
+
+## Results
+
+### Main results
+
+Our test results only encompassed predicting the mode of transport for a "trip" with two data points, of which most were a few seconds apart. Overall, we were able to achieve decent accuracy using straightforward methods like K-Nearest Neighbors and Random Forest. 
+
+#### KNN
+
+Train accuracy: 0.687
+
+Test accuracy: 0.662
+
+#### Random Forest
+
+Train accuracy: 0.643
+
+Test accuracy: 0.645
+
+#### Neural Network
+
+Todo...
+
+#### Ablation study
+
+We hypothesized that these algorithms might perform worse on trips where the time in seconds between the two points was very large. That's because an extreme majority of the training data actually had a time less than 5 seconds between the points in the trip. We chose to test this using random forest, and surprisingly found it performs better on large trips in the dataset with an accuracy of 0.731.
+
+### Supplementary results
+
+We used K-fold cross validation to find the optimal number of neighbors to use for our K-Nearest Neighbors algorithm. This was done using the GridSearchCV function from sklearn.
+
+![Alt text](img/knn_cv.png)
+
+This figure demonstrates that the optimal number of neighbors is 19.
+
+We also used K-fold cross validation for the Random Forest algorithm, this time using GridSearchCV to cross validate the number of trees and the max depth. 
+
+![](img/forest_cv.png)
+
+This figure demonstrates that the optimal max depth is 7, and number of trees is 19.
+
+## Discussion
+
+Although the performance of our models aren't bad by any means, we think there's still room to improve. A large part of this project was feature engineering, so we could take the users' location data and formulate it into an accomplishable supervised learning problem. We think our features can be better. For instance, maybe the model will be able to recognize patterns in latitude/longitude and create a "map" (maybe a certain group of coordinates labeled boats will end up being on the water). We're currently abstracting away this information by only telling the model the distance between points in the trip. 
+
+As far as validation goes, it's always possible to increase the range of hyperparameters we're checking. This would make the grid search run for longer, but we could see marginal improvements in accuracy if there are more trees in a random forest, for instance. Our current searches were limited to keep runtime within a reasonable timeframe. 
+
+## Conclusion
+
+Our goal was to use a sequence of location data points to predict the mode of transport for a user, and to use the classification algorithms we wanted, we had to break it down into a much smaller problem. To break it down, we had to engineer features to feed into our models from the raw latitude/longitude/altitude sequences. Algorithms like K-nearest neighbors had the best accuracy of about 66%, and this was fine-tuned with cross-validation to extract the best performance. 
