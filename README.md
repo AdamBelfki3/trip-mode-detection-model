@@ -14,3 +14,37 @@ A very large component of this project will actually be feature engineering. Alt
 
 ## Setup
 
+Our initial task was to find a dataset that can provide us with information about the mode of transportation employed by users during their trips. A trip's data would be labeled by its **Transportation Mode** and should contain a sequence of spatiotemporal information collected at a relatively high frequency (to better trace the variation of the parameters/features over the duration of the trip), indicating the precise location of the user and the time it was captured at. 
+
+We found the [**Geolife GPS trajectory**](https://www.microsoft.com/en-us/research/publication/geolife-gps-trajectory-dataset-user-guide/) dataset to be an excellent starting point towards building our desired and final dataset. The data consists of multiple directories (each representing a single user's data) with multiple trajectory files each containing a series of chronological localization data alongside a file indicating the mode of transportation used by its user during a certain timed interval. Each single datapoint for a trip consists of the latitude and longitude coordinates and the altitude (in ft) captured at a moment in time.
+
+![Geolife Data](./labels.png) ![Geolife Data](./trajectories.png)
+
+We then randomly selected a number of users to process their data. This phase consisted of discarding any localization datapoints that did not fall within the time intervals of any labebled trajectories as well as limiting the number of data points retained per user to a maximum of 200 000 points. Once we obtain the labeled spatiotemporal ticks for each trip, we combine each point with the immediate next data point registered to create a movement record for the tripand and compute features like the average distance, time, altitude as well as velocity (distance / time) between each two points. 
+
+For example:
+
+
+|   | Pre-processing          | Post-processing                                |
+|---|-------------------------|------------------------------------------------|
+|   | (Lat, Long, Time, Mode) | (Distance, Duration, Velocity, Altitude, Mode) |
+| 1 | A [walk]                | A -> B [walk]                                  |
+| 2 | B [walk]                | B -> C [walk]                                  |
+| 3 | C [walk]                | C -> D [walk]                                  |
+| 4 | D [walk]                |                                                |
+
+Our final dataset totals 1 149 022 datapoints collected from the data of 19 different users. The columns include the Distance(m), Duration(s), Velocity(m/s), Altitude(m) features as well as the target column containing the labels for the TransportMode of each datapoint. 
+
+![Final Data](./multi_user_data.png)
+
+
+The distribution of the labels in the dataset looks as follows:
+
+<p align="left" width="100%">
+<img src="./chart.png" width="30%" height="15%">
+</p>
+
+
+The experimental setup we implemented focused on splitting our generated dataset to a train (80%) and test (20%) data splits and subsequently train different classification models and compare the accuracy and score results. We decided to experiment with the **K-Nearest Neighbors** and **Random Forest Classifiers**, with hyperparameter tuning for chosen parameters using KFold cross validation. In the KNN model we work on finding the optimal number of neighbors to be considered in the model, while for Random Forest we wanted to optimize both the tree depth and number of trees generated.
+
+Our next step is to implement a Neural Network to train our data on. The structure of the network will have one hidden layer of 100 neurons with a ReLU activation function and a log softmax applied on the output layer.
