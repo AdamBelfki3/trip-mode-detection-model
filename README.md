@@ -41,7 +41,7 @@ Our final dataset totals 1 149 022 datapoints collected from the data of 19 diff
 The distribution of the labels in the dataset looks as follows:
 
 <p align="left" width="100%">
-<img src="./chart.png" width="30%" height="15%">
+<img src="./img/class_distribution_pie_chart.png" width="50%" height="35%">
 </p>
 
 
@@ -61,11 +61,19 @@ Train accuracy: 0.687
 
 Test accuracy: 0.662
 
+<p align="left" width="100%">
+<img src="./img/knn_confusion_matrix.png" width="50%" height="35%">
+</p>
+
 #### Random Forest
 
 Train accuracy: 0.643
 
 Test accuracy: 0.645
+
+<p align="left" width="100%">
+<img src="./img/random_forest_confusion_matrix.png" width="50%" height="35%">
+</p>
 
 #### Neural Network
 
