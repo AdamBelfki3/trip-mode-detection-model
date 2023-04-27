@@ -75,6 +75,16 @@ Test accuracy: 0.645
 <img src="./img/random_forest_confusion_matrix.png" width="50%" height="35%">
 </p>
 
+#### Gradient Boosting
+
+Train accuracy: 0.644
+
+Test accuracy: 0.643
+
+<p align="left" width="100%">
+<img src="./img/gradient_boosting_confusion_matrix.png" width="50%" height="35%">
+</p>
+
 #### Neural Network
 
 Todo...
@@ -96,6 +106,12 @@ We also used K-fold cross validation for the Random Forest algorithm, this time 
 ![](img/forest_cv.png)
 
 This figure demonstrates that the optimal max depth is 7, and number of trees is 19.
+
+K-fold cross validation was also used on the Gradient Boosting model, using GridSearchCV, to determine the optimal number of estimators and the learning rate.
+
+![](img/gradient_boosting_cv.png)
+
+The figure demonstrates that the optimal learning rate is 0.1, and the best number of estimators is 19.
 
 ## Discussion
 
