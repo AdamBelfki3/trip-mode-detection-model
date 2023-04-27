@@ -92,8 +92,6 @@ Test accuracy: 0.643
 
 Test accuracy: 0.547
 
-Please use light mode to properly view the titles and labels on the following graphs:
-
 <p align="left" width="100%">
 <img src="./img/nn_losses.png" width="80%" height="35%">
 </p>
