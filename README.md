@@ -44,16 +44,19 @@ The distribution of the labels in the dataset looks as follows:
 <img src="./img/class_distribution_pie_chart.png" width="50%" height="35%">
 </p>
 
+To obtain to final cleaned dataset, download the data from the Geolife GPS Trajectory linked above. Then, download the `clean.sh` script and copy it into the data directory. Change the first line of the script to the path where you want the cleaned data to be copied to. Finally, run `./clean.sh`, and you may have to `chmod u+x clean.sh` beforehand. 
 
 The experimental setup we implemented focused on splitting our generated dataset to a train (80%) and test (20%) data splits and subsequently train different classification models and compare the accuracy and score results. We decided to experiment with the **K-Nearest Neighbors** and **Random Forest Classifiers**, with hyperparameter tuning for chosen parameters using KFold cross validation. In the KNN model we work on finding the optimal number of neighbors to be considered in the model, while for Random Forest we wanted to optimize both the tree depth and number of trees generated.
 
-Our next step is to implement a Neural Network to train our data on. The structure of the network will have one hidden layer of 100 neurons with a ReLU activation function and a log softmax applied on the output layer.
+Our next step was to implement a Neural Network to train our data on. The structure of the network will have one hidden layer of 128 or 256 neurons, and we plan to compare to see which is better. We will use a ReLU activation function and a log softmax applied on the output layer.
 
 ## Results
 
 ### Main results
 
 Our test results only encompassed predicting the mode of transport for a "trip" with two data points, of which most were a few seconds apart. Overall, we were able to achieve decent accuracy using straightforward methods like K-Nearest Neighbors and Random Forest. 
+
+Our neural networks were trained on a NVIDIA V100 GPU on the Northeastern Discovery cluster. 
 
 #### KNN
 
@@ -87,7 +90,12 @@ Test accuracy: 0.643
 
 #### Neural Network
 
-Todo...
+Test accuracy: 0.547
+
+<p align="left" width="100%">
+<img src="./img/nn_losses.png" width="80%" height="35%">
+</p>
+
 
 #### Ablation study
 
@@ -115,10 +123,14 @@ The figure demonstrates that the optimal learning rate is 0.1, and the best numb
 
 ## Discussion
 
+The best test performance we achieved was 0.645 by random forest, which marginally beat KNN and gradient boosting. 
+
 Although the performance of our models aren't bad by any means, we think there's still room to improve. A large part of this project was feature engineering, so we could take the users' location data and formulate it into an accomplishable supervised learning problem. We think our features can be better. For instance, maybe the model will be able to recognize patterns in latitude/longitude and create a "map" (maybe a certain group of coordinates labeled boats will end up being on the water). We're currently abstracting away this information by only telling the model the distance between points in the trip. 
+
+For neural networks, we chose a small number of epochs because the amount of data in 1 epoch was very large. With different learning rate and model sizes, the best model still struggled to get under 1.25 loss and seemed to converge there. It's possible the large number of parameters caused overfitting to the few features, which would explain why the test accuracy was less than other methods.
 
 As far as validation goes, it's always possible to increase the range of hyperparameters we're checking. This would make the grid search run for longer, but we could see marginal improvements in accuracy if there are more trees in a random forest, for instance. Our current searches were limited to keep runtime within a reasonable timeframe. 
 
 ## Conclusion
 
-Our goal was to use a sequence of location data points to predict the mode of transport for a user, and to use the classification algorithms we wanted, we had to break it down into a much smaller problem. To break it down, we had to engineer features to feed into our models from the raw latitude/longitude/altitude sequences. Algorithms like K-nearest neighbors had the best accuracy of about 66%, and this was fine-tuned with cross-validation to extract the best performance. 
+Our goal was to use a sequence of location data points to predict the mode of transport for a user, and to use the classification algorithms we wanted, we had to break it down into a much smaller problem. To break it down, we had to engineer features to feed into our models from the raw latitude/longitude/altitude sequences. Algorithms like K-nearest neighbors and random forest had the best accuracy of about 66%, and this was fine-tuned with cross-validation to extract the best performance. 
