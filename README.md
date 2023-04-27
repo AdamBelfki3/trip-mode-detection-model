@@ -18,7 +18,7 @@ Our initial task was to find a dataset that can provide us with information abou
 
 We found the [**Geolife GPS trajectory**](https://www.microsoft.com/en-us/research/publication/geolife-gps-trajectory-dataset-user-guide/) dataset to be an excellent starting point towards building our desired and final dataset. The data consists of multiple directories (each representing a single user's data) with multiple trajectory files each containing a series of chronological localization data alongside a file indicating the mode of transportation used by its user during a certain timed interval. Each single datapoint for a trip consists of the latitude and longitude coordinates and the altitude (in ft) captured at a moment in time.
 
-![Geolife Data](./labels.png) ![Geolife Data](./trajectories.png)
+![Geolife Data](./img/labels.png) ![Geolife Data](./img/trajectories.png)
 
 We then randomly selected a number of users to process their data. This phase consisted of discarding any localization datapoints that did not fall within the time intervals of any labebled trajectories as well as limiting the number of data points retained per user to a maximum of 200 000 points. Once we obtain the labeled spatiotemporal ticks for each trip, we combine each point with the immediate next data point registered to create a movement record for the tripand and compute features like the average distance, time, altitude as well as velocity (distance / time) between each two points. 
 
@@ -35,7 +35,7 @@ For example:
 
 Our final dataset totals 1 149 022 datapoints collected from the data of 19 different users. The columns include the Distance(m), Duration(s), Velocity(m/s), Altitude(m) features as well as the target column containing the labels for the TransportMode of each datapoint. 
 
-![Final Data](./multi_user_data.png)
+![Final Data](./img/multi_user_data.png)
 
 
 The distribution of the labels in the dataset looks as follows:
